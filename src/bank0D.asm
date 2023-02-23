@@ -4157,9 +4157,9 @@ Pl_MoveRightChkSpeed:
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .chkFastSpeed
-	ld   a, [sPlPower]
-	cp   a, PL_POW_JET
-	jr   z, .chkFastSpeed
+	ld   a, [sPlAction]			; Modified 'Jet Wario' check.
+	and  a
+	jr   nz, .chkFastSpeed
 	
 	; Bull Wario walks at normal speed, even when holding beavy actors
 	ld   a, [sPlPower]
@@ -4318,9 +4318,9 @@ Pl_MoveLeftChkSpeed:
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .chkFastSpeed
-	ld   a, [sPlPower]
-	cp   a, PL_POW_JET
-	jr   z, .chkFastSpeed
+	ld   a, [sPlAction]			; Modified 'Jet Wario' check.
+	and  a
+	jr   nz, .chkFastSpeed
 	
 	; [BUG] They forgot to add a check for Bull Wario here!
 	;		You're meant to always move at normal speed in that state, even when carrying an heavy actor.
@@ -4428,9 +4428,9 @@ Pl_WalkAnim:
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .fastSFX
-	ld   a, [sPlPower]
-	cp   a, PL_POW_JET
-	jr   z, .fastSFX
+	ld   a, [sPlAction] ; Modified to always force the 'fast' animation.
+	and  a
+	jr   nz, .fastSFX
 	; Everything else uses the normal SFX
 .normSfx:
 	call Wario_PlayWalkSFX_Norm

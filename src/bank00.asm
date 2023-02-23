@@ -4635,7 +4635,7 @@ IF TEST == 1
 	ld   a, \2				; Otherwise, break in one go (COLI_EMPTY or COLI_WATER)
 	ret
 ELSE
-	ld   a, COLI_SOLID
+	and  a					; Remove COLI_SOLID, which allows the charge to continue. 
 	ret
 ENDC
 ENDM
