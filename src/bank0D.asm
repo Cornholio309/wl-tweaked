@@ -4154,14 +4154,18 @@ Pl_MoveRightChkSpeed:
 	jr   z, Pl_MoveRightWithScreen
 	
 	; Invincibility and Jet Wario try to move at fast speed
+	; This check needs to be modified somehow in a clean way in order to force a faster walking speed.
+	; 'constants.asm' contains values that we can check against. 
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .chkFastSpeed
-	ld   a, [sPlAction]			; Modified 'Jet Wario' check.
-	and  a
-	jr   nz, .chkFastSpeed
+	; This is the modified Jet Wario check.
+	ld   a, [sPlAction] ; Checking Current Player Action...(
+	cp   a, PL_ACT_WALK ; ...Which is just you moving! So you're always speedy!
+	jr   z, .chkFastSpeed
 	
 	; Bull Wario walks at normal speed, even when holding beavy actors
+	; This check should be redundant now, since we're already checking what speed type to use above.
 	ld   a, [sPlPower]
 	cp   a, PL_POW_BULL
 	jr   z, Pl_MoveRightWithScreen
@@ -4318,9 +4322,10 @@ Pl_MoveLeftChkSpeed:
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .chkFastSpeed
-	ld   a, [sPlAction]			; Modified 'Jet Wario' check.
-	and  a
-	jr   nz, .chkFastSpeed
+	; Again, modified Jet Wario check to just check the player action ('walking').
+	ld   a, [sPlAction]
+	cp   a, PL_ACT_WALK
+	jr   z, .chkFastSpeed
 	
 	; [BUG] They forgot to add a check for Bull Wario here!
 	;		You're meant to always move at normal speed in that state, even when carrying an heavy actor.
@@ -4428,9 +4433,9 @@ Pl_WalkAnim:
 	ld   a, [sPlInvincibleTimer]
 	and  a
 	jr   nz, .fastSFX
-	ld   a, [sPlAction] ; Modified to always force the 'fast' animation.
-	and  a
-	jr   nz, .fastSFX
+	ld   a, [sPlAction]
+	cp   a, PL_ACT_WALK
+	jr   z, .fastSFX
 	; Everything else uses the normal SFX
 .normSfx:
 	call Wario_PlayWalkSFX_Norm

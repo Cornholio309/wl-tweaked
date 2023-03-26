@@ -4635,7 +4635,7 @@ IF TEST == 1
 	ld   a, \2				; Otherwise, break in one go (COLI_EMPTY or COLI_WATER)
 	ret
 ELSE
-	and  a					; Remove COLI_SOLID, which allows the charge to continue. 
+	ld   a, mBGColi_BreakHardToEmpty
 	ret
 ENDC
 ENDM
